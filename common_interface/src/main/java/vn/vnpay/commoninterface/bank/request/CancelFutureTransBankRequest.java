@@ -1,0 +1,14 @@
+package vn.vnpay.commoninterface.bank.request;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
+public class CancelFutureTransBankRequest extends BaseBankRequest {
+    private String batchId;
+    private String transId;
+
+}

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+    <property name="LOG_PATH" value="logs"/>
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <charset>UTF-8</charset>
+            <layout class="vn.vnpay.commoninterface.config.MaskingPatternLayout">
+                <maskPattern>\"password\"\s*:\s*\"(.*?)\"</maskPattern>
+                <maskPattern>\"oldPassword\"\s*:\s*\"(.*?)\"</maskPattern>
+                <maskPattern>\"newPassword\"\s*:\s*\"(.*?)\"</maskPattern>
+                <maskPattern>\"pin\"\s*:\s*\"(.*?)\"</maskPattern>
+                <maskPattern>\"oldPin\"\s*:\s*\"(.*?)\"</maskPattern>
+                <maskPattern>\"newPin\"\s*:\s*\"(.*?)\"</maskPattern>
+                <pattern>%d{DEFAULT} [%5p] [%30C{1}] [%4L] [%X{traceId:-}, %X{spanId}] - %m%n%exception</pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${springAppName}.log</file>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <charset>UTF-8</charset>
+            <layout class="vn.vnpay.commoninterface.config.MaskingPatternLayout">
+                <maskPattern>\"password\"\s*:\s*\"(.*?)\"</maskPattern>
+                <maskPattern>\"oldPassword\"\s*:\s*\"(.*?)\"</maskPattern>
+                <maskPattern>\"newPassword\"\s*:\s*\"(.*?)\"</maskPattern>
+                <maskPattern>\"pin\"\s*:\s*\"(.*?)\"</maskPattern>
+                <maskPattern>\"oldPin\"\s*:\s*\"(.*?)\"</maskPattern>
+                <maskPattern>\"newPin\"\s*:\s*\"(.*?)\"</maskPattern>
+                <pattern>%d{DEFAULT} [%5p] [%30C{1}] [%4L] [%X{traceId:-}, %X{spanId}] - %m%n%exception</pattern>
+            </layout>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily and when the file reaches 10 MegaBytes -->
+            <fileNamePattern>${LOG_PATH}/archived/${springAppName}-%d{yyyy-MM-dd}-%i.log.gz
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>20MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <!--    <appender name="Gelf" class="biz.paluch.logging.gelf.logback.GelfLogbackAppender">-->
+    <!--        <host>udp:10.22.7.175</host>-->
+    <!--        <port>12208</port>-->
+    <!--        <facility>${springAppName}</facility>-->
+    <!--        <originHost>${springAppName}</originHost>-->
+    <!--        <extractStackTrace>true</extractStackTrace>-->
+    <!--        <filterStackTrace>true</filterStackTrace>-->
+    <!--        <mdcProfiling>true</mdcProfiling>-->
+    <!--        <maximumMessageSize>8192</maximumMessageSize>-->
+
+    <!--        &lt;!&ndash; This are fields using MDC &ndash;&gt;-->
+    <!--        <mdcFields>traceId,spanId</mdcFields>-->
+    <!--        <includeFullMdc>true</includeFullMdc>-->
+
+    <!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+    <!--            <level>INFO</level>-->
+    <!--        </filter>-->
+    <!--    </appender>-->
+
+    <!-- LOG everything at INFO level -->
+    <root level="info">
+        <appender-ref ref="RollingFile"/>
+        <appender-ref ref="Console"/>
+        <!--        <appender-ref ref="Gelf"/>-->
+    </root>
+
+</configuration>
